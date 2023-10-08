@@ -16,7 +16,7 @@ engine.setProperty("voice", voices[1].id)
 chrome_path = "C://Program Files//Google//Chrome//Application//chrome.exe %s"
 
 # Contact List
-contact = [["me", info.me()], ["mother", info.mother()], ["sister", info.sister()], ["girlfriend", info.girlfriend()]]
+contact = [["me", info.me()], ["mother", info.mother()], ["sister", info.sister()], ["girlfriend", info.girlfriend()],["father",info.father()]]
 
 # Sites list
 site = [["google", "google.com"], ["youtube","youtube.com"], ["whatsapp", "web.whatsapp.com"],["github","github.com"]]
@@ -71,8 +71,8 @@ def greet():
 
 
 if __name__ == "__main__":
-    speak("Hello, I'm orion")
-    if True:
+    speak("Hello, I'm orion, how can i help you")
+    while True:
         userSaid = takecommand().lower()
         if userSaid == "hello":
             greet()
@@ -93,22 +93,26 @@ if __name__ == "__main__":
         elif "open" in userSaid:
             for i in site:
                 if f"open {i[0]}" in userSaid:
+                    speak(f"opening {i[0]}")
                     webbrowser.get(chrome_path).open(i[1])
                     break
         
         elif "youtube search" in userSaid:
             userSaid = userSaid.replace("youtube search", "")
+            speak("searching on youtube")
             webbrowser.get(chrome_path).open(
                 f"https://www.youtube.com/results?search_query={userSaid}")
 
         elif "search" in userSaid:
             userSaid = userSaid.replace("search", "")
+            speak("searching on google")
             webbrowser.get(chrome_path).open(
                 f"https://www.google.com/search?q={userSaid}")
 
         elif "start" in userSaid:
             for i in shortcuts:
                 if f"start {i[0]}" in userSaid:
+                    speak(f"starting {i[0]}")
                     path = i[1]
                     os.startfile(path)
                     break
@@ -119,10 +123,11 @@ if __name__ == "__main__":
                     speak("please tell your message")
                     userSaid = takecommand()
                     pywhatkit.sendwhatmsg_instantly(i[1], userSaid, 30, True)
-                    pyautogui.click(1050, 950)
-                    time.sleep(15)
-                    k.press_and_release('enter')
+                    # pyautogui.click(1050, 950)
+                    # time.sleep(15)
+                    # k.press_and_release('enter')
+                    speak("message sent")
 
-        # elif "pause" in userSaid or "stop" in userSaid:
-        #     speak("Thank you for letting me assist you")
-        #     break
+        elif "pause" in userSaid or "stop" in userSaid:
+            speak("Thank you for letting me assist you")
+            break
