@@ -8,10 +8,12 @@ import pywhatkit
 import pyautogui
 import keyboard as k
 import info
+import openai
 engine = pyttsx3.init("sapi5")
 voices = engine.getProperty("voices")
-# print(voices[0].id)
 engine.setProperty("voice", voices[1].id)
+#Openai API key
+openai.api_key = info.apiKey()
 # Chrome Path
 chrome_path = "C://Program Files//Google//Chrome//Application//chrome.exe %s"
 
@@ -69,9 +71,28 @@ def greet():
         time = "night"
     speak(f"Good {time} Sir, I'm Orion, How may I help you")
 
+def Openai(input):
+    #have to wrap in try expect block
+        response = openai.ChatCompletion.create(
+        model="gpt-3.5-turbo",
+        messages=[
+            {
+            "role": "user",
+            "content": input
+            }
+        ],
+        temperature=1,
+        max_tokens=256,
+        top_p=1,
+        frequency_penalty=0,
+        presence_penalty=0
+        )
+        return response["choices"][0]["text"]
+        
+
 
 if __name__ == "__main__":
-    speak("Hello, I'm orion, how can i help you")
+    speak("Orion A I")
     while True:
         userSaid = takecommand().lower()
         if userSaid == "hello":
@@ -127,6 +148,13 @@ if __name__ == "__main__":
                     # time.sleep(15)
                     # k.press_and_release('enter')
                     speak("message sent")
+
+        elif "write a"  in userSaid:
+            response=Openai(userSaid)
+            f=open(f"Openai/{userSaid[6:]}.txt","w")
+            f.write(response)
+            f.close()
+            os.startfile(f"C://Users//DELL//Desktop//Books//Alexa//Openai//{userSaid[6:]}.txt")
 
         elif "pause" in userSaid or "stop" in userSaid:
             speak("Thank you for letting me assist you")
